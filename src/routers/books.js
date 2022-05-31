@@ -2,9 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 
-// GET all fiction books
+// GET all fiction and non-fiction books
 router.get("/", async (req, res) => {
   const type = req.query.type;
+  if (type.includes(" ")) {
+    type = type.replaceAll(" ", "-");
+  }
   const topic = req.query.topic;
   let sqlString = 'SELECT * FROM "books"';
 
@@ -15,6 +18,7 @@ router.get("/", async (req, res) => {
   } else if (topic) {
     sqlString += ` WHERE topic = '${topic}';`;
   }
+  console.log(sqlString);
   const result = await db.query(sqlString);
   res.json({ books: result.rows });
 });
