@@ -4,9 +4,18 @@ const db = require("../../db");
 
 // GET all books
 router.get("/", async (req, res) => {
-  // get data from database table called books
-  const result = await db.query('SELECT * FROM "books";');
-  // send back a response
+  const type = req.query.type;
+  const topic = req.query.topic;
+  let sqlString = 'SELECT * FROM "books"';
+
+  if (type && topic) {
+    sqlString += ` WHERE type = '${type}' AND topic = '${topic}';`;
+  } else if (type) {
+    sqlString += ` WHERE type = '${type}';`;
+  } else if (topic) {
+    sqlString += ` WHERE topic = '${topic}';`;
+  }
+  const result = await db.query(sqlString);
   res.json({ books: result.rows });
 });
 
