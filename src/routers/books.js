@@ -1,9 +1,33 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 const db = require("../../db");
 
-router.get('/', async (req, res) => {
+// GET all books
+router.get("/", async (req, res) => {
+  // get data from database table called books
+  const result = await db.query('SELECT * FROM "books";');
+  // send back a response
+  res.json({ books: result.rows });
+});
 
-})
+// GET book id
+router.get("/:id", async (req, res) => {
+  // extract id from the path
+  const id = req.params.id;
+  // get data from the table
+  const result = await db.query(`SELECT * FROM "books" WHERE id = ${id};`);
+  const book = result.rows[0];
+  // send back a response
+  res.json({ book: book });
+});
 
-module.exports = router
+// POST or CREATE a new book
+router.post("/", async (req, res) => {
+  const result = await db.query(
+    `INSERT INTO books (title, type, author, topic, publicationDate, pages) 
+    VALUES ('2312', 'Fiction', 'Kim Stanley Robinson', 'science fiction', '2020-09-13T01:03:23.774+01:00', 300 ) returning *`
+  );
+  res.json({ book: result.rows[0] });
+});
+
+module.exports = router;
