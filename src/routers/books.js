@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 
-// GET all books
+// GET all fiction books
 router.get("/", async (req, res) => {
   const type = req.query.type;
   const topic = req.query.topic;
