@@ -5,9 +5,6 @@ const db = require("../../db");
 // GET all fiction and non-fiction books
 router.get("/", async (req, res) => {
   const type = req.query.type;
-  if (type.includes(" ")) {
-    type = type.replaceAll(" ", "-");
-  }
   const topic = req.query.topic;
   let sqlString = 'SELECT * FROM "books"';
 
