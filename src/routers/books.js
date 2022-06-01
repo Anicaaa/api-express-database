@@ -40,4 +40,29 @@ router.post("/", async (req, res) => {
   res.json({ book: result.rows[0] });
 });
 
+//PUT or UPDATE a book
+router.put("/:id", async (req, res) => {
+  const result = await db.query(`UPDATE "books"
+  SET
+    title = '2312',
+    type = 'Fiction',
+    author = 'Kim Stanley Robinson',
+    topic = 'science fiction',
+    publicationDate = '2020-09-13T01:03:23.774+01:00',
+    pages = 300
+    WHERE id = 42
+    returning *`);
+  res.json({ book: result.rows[0] });
+  //console.log("THIS IS RESULT:", result);
+});
+
+//DELETE book id
+router.delete("/:id", async (req, res) => {
+  const result = await db.query(`DELETE from "books"
+    WHERE id = 42
+    returning *`);
+  res.json({ book: result.rows[0] });
+  //console.log("THIS IS RESULT:", result);
+});
+
 module.exports = router;
